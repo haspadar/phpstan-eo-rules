@@ -26,9 +26,6 @@
     "test": "phpunit --order-by=random"
   },
   "config": {
-    "platform-check": false,
-    "allow-plugins": {
-      "infection/extension-installer": true
-    }
+    "platform-check": false
   }
 }
