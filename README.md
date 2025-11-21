@@ -22,7 +22,7 @@ composer require --dev haspadar/phpstan-eo-rules
 
 Enable in your `phpstan.neon`:
 
-```
+```neon
 includes:
     - vendor/haspadar/phpstan-eo-rules/extension.neon
 ```
