@@ -1,0 +1,34 @@
+name-template: "v$NEXT_PATCH_VERSION 🌱"
+tag-template: "v$NEXT_PATCH_VERSION"
+version-template: "$MAJOR.$MINOR.$PATCH"
+
+categories:
+  - title: "✨ Features"
+    labels:
+      - "feature"
+      - "feat"
+  - title: "🐞 Bug Fixes"
+    labels:
+      - "bug"
+      - "fix"
+  - title: "📚 Documentation"
+    labels:
+      - "docs"
+  - title: "🧹 Refactoring"
+    labels:
+      - "refactor"
+      - "cleanup"
+  - title: "🔧 Maintenance"
+    labels:
+      - "chore"
+      - "ci"
+
+change-template: "- $TITLE (#$NUMBER)"
+change-title-escapes: ""
+
+exclude-labels:
+  - "skip-changelog"
+
+template: |
+  ## Changes
+  $CHANGES
