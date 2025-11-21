@@ -24,7 +24,6 @@ categories:
       - "ci"
 
 change-template: "- $TITLE (#$NUMBER)"
-change-title-escapes: ""
 
 exclude-labels:
   - "skip-changelog"
