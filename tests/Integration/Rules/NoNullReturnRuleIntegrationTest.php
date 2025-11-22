@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanEoRules\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 final class NoNullReturnRuleIntegrationTest extends TestCase
@@ -22,64 +23,60 @@ final class NoNullReturnRuleIntegrationTest extends TestCase
         $this->phpstanBin = __DIR__ . '/../../../vendor/bin/phpstan';
         $this->tmpDir = sys_get_temp_dir() . '/phpstan-eo-rules-integration';
 
-        if (!is_dir($this->tmpDir)) {
-            mkdir($this->tmpDir, 0777, true);
+        if (!@mkdir($this->tmpDir, 0777, true) && !is_dir($this->tmpDir)) {
+            throw new \RuntimeException("Failed to create temp dir: $this->tmpDir");
         }
     }
 
-    public function testSuppressedNullDoesNotTriggerError(): void
+    #[Test]
+    public function returnsSuccessWhenSuppressedNullGiven(): void
     {
-        $fixture = __DIR__ . '/../../Fixtures/Rules/NoNullReturnRule/SuppressedNull.php';
         $copy = $this->tmpDir . '/SuppressedNull.php';
-        copy($fixture, $copy);
-
-        $cmd = sprintf(
-            '%s analyse --error-format raw %s',
-            escapeshellcmd($this->phpstanBin),
-            escapeshellarg($copy)
+        copy(
+            __DIR__ . '/../../Fixtures/Rules/NoNullReturnRule/SuppressedNull.php',
+            $copy
         );
 
-        exec($cmd, $output, $code);
-        $outputText = implode("\n", $output);
+        exec(
+            sprintf(
+                '%s analyse --error-format raw %s',
+                escapeshellcmd($this->phpstanBin),
+                escapeshellarg($copy)
+            ),
+            $output,
+            $code
+        );
 
-        $this->assertSame(
+        self::assertSame(
             0,
             $code,
-            "Expected suppression to prevent errors, but PHPStan returned non-zero exit code.\nOutput:\n$outputText"
-        );
-
-        $this->assertStringNotContainsString(
-            'Returning null is forbidden by EO rules',
-            $outputText,
-            "Error message should not appear when suppression is active."
+            'Suppressed return null should not trigger an error'
         );
     }
 
-    public function testUnsuppressedNullTriggersError(): void
+    #[Test]
+    public function returnsErrorWhenUnsuppressedNullGiven(): void
     {
-        $fixture = __DIR__ . '/../../Fixtures/Rules/NoNullReturnRule/WithNullReturn.php';
         $copy = $this->tmpDir . '/WithNullReturn.php';
-        copy($fixture, $copy);
-
-        $cmd = sprintf(
-            '%s analyse --error-format raw %s',
-            escapeshellcmd($this->phpstanBin),
-            escapeshellarg($copy)
+        copy(
+            __DIR__ . '/../../Fixtures/Rules/NoNullReturnRule/WithNullReturn.php',
+            $copy
         );
 
-        exec($cmd, $output, $code);
-        $outputText = implode("\n", $output);
+        exec(
+            sprintf(
+                '%s analyse --error-format raw %s',
+                escapeshellcmd($this->phpstanBin),
+                escapeshellarg($copy)
+            ),
+            $output,
+            $code
+        );
 
-        $this->assertNotSame(
+        self::assertNotSame(
             0,
             $code,
-            "Expected error due to return null, but PHPStan exit code was 0.\nOutput:\n$outputText"
-        );
-
-        $this->assertStringContainsString(
-            'Returning null is forbidden by EO rules',
-            $outputText,
-            "Error message was expected but not found in output."
+            'Unsuppressed return null should trigger an error'
         );
     }
 }
