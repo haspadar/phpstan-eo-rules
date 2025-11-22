@@ -1,3 +1,6 @@
+includes:
+    - rules.neon
+
 parameters:
     level: 9
     paths:

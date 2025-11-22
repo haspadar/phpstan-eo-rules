@@ -1,0 +1,3 @@
+services:
+    - class: Haspadar\PHPStanEoRules\Rules\NoNullReturnRule
+      tags: [phpstan.rules.rule]
