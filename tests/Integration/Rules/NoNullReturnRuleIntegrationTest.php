@@ -1,4 +1,5 @@
 <?php
+
 /*
  * SPDX-FileCopyrightText: Copyright (c) 2025 Konstantinas Mesnikas
  * SPDX-License-Identifier: MIT
@@ -18,6 +19,10 @@ final class NoNullReturnRuleIntegrationTest extends TestCase
     {
         parent::setUp();
         $this->phpstanBin = __DIR__ . '/../../../vendor/bin/phpstan';
+        self::assertFileExists(
+            $this->phpstanBin,
+            'PHPStan binary not found; ensure dependencies are installed',
+        );
     }
 
     #[Test]
@@ -30,20 +35,20 @@ final class NoNullReturnRuleIntegrationTest extends TestCase
                 '%s analyse --configuration %s --error-format raw %s',
                 escapeshellcmd($this->phpstanBin),
                 escapeshellarg(__DIR__ . '/../../../phpstan.neon'),
-                escapeshellarg($fixture)
+                escapeshellarg($fixture),
             ),
             $output,
-            $code
+            $code,
         );
 
         self::assertSame(
             0,
             $code,
-            'Suppressed return null should not trigger an error'
+            'Suppressed return null should not trigger an error',
         );
         self::assertEmpty(
             $output,
-            'No errors should be reported for suppressed null return'
+            'No errors should be reported for suppressed null return',
         );
     }
 
@@ -57,21 +62,21 @@ final class NoNullReturnRuleIntegrationTest extends TestCase
                 '%s analyse --configuration %s --error-format raw %s',
                 escapeshellcmd($this->phpstanBin),
                 escapeshellarg(__DIR__ . '/../../../phpstan.neon'),
-                escapeshellarg($fixture)
+                escapeshellarg($fixture),
             ),
             $output,
-            $code
+            $code,
         );
 
         self::assertNotSame(
             0,
             $code,
-            'Unsuppressed return null should trigger an error'
+            'Unsuppressed return null should trigger an error',
         );
         self::assertStringContainsString(
             'Returning null is forbidden by EO rules',
             implode("\n", $output),
-            'Expected error message should appear in output'
+            'Expected error message should appear in output',
         );
     }
 }

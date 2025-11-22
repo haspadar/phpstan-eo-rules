@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 /**
  * @implements Rule<Return_>
@@ -25,9 +24,6 @@ final class NoNullReturnRule implements Rule
         return Return_::class;
     }
 
-    /**
-     * @throws ShouldNotHappenException
-     */
     public function processNode(Node $node, Scope $scope): array
     {
         if ($node->expr === null) {
