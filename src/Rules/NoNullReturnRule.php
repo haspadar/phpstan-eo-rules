@@ -30,8 +30,6 @@ final class NoNullReturnRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        assert($node instanceof Return_);
-
         if ($node->expr === null) {
             return [];
         }
