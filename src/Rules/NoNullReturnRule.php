@@ -15,6 +15,9 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
+/**
+ * @implements Rule<Return_>
+ */
 final class NoNullReturnRule implements Rule
 {
     public function getNodeType(): string
@@ -27,6 +30,8 @@ final class NoNullReturnRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
+        assert($node instanceof Return_);
+
         if ($node->expr === null) {
             return [];
         }
