@@ -3,6 +3,9 @@ tag-template: "v$NEXT_PATCH_VERSION"
 version-template: "$MAJOR.$MINOR.$PATCH"
 
 categories:
+  - title: "🚨 Breaking Changes"
+    labels:
+      - "breaking"
   - title: "✨ Features"
     labels:
       - "feature"
@@ -18,6 +21,12 @@ categories:
     labels:
       - "refactor"
       - "cleanup"
+  - title: "⚡ Performance"
+    labels:
+      - "performance"
+  - title: "🔒 Security"
+    labels:
+      - "security"
   - title: "🔧 Maintenance"
     labels:
       - "chore"
