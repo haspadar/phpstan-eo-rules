@@ -12,11 +12,13 @@ use Haspadar\PHPStanEoRules\Tests\Integration\PhpStanProcess;
 use PHPUnit\Framework\Constraint\Constraint;
 
 /**
- * Asserts that a file fails PHPStan analysis with a specific error message
- * The constraint expects a file path string as input
+ * Asserts that a file fails PHPStan analysis with a specific error message.
+ * The constraint expects a file path string as input.
  */
 final class RuleFailsWithMessage extends Constraint
 {
+    private ?PhpStanOutcome $lastOutcome = null;
+
     public function __construct(
         private readonly string $ruleClass,
         private readonly string $expectedMessage
@@ -34,14 +36,14 @@ final class RuleFailsWithMessage extends Constraint
 
     protected function matches($other): bool
     {
-        $outcome = $this->runPhpStan($other);
+        $this->lastOutcome = $this->runPhpStan($other);
 
-        if (!$outcome) {
+        if (!$this->lastOutcome) {
             return false;
         }
 
-        return $outcome->hasErrors()
-            && $outcome->containsMessage($this->expectedMessage);
+        return $this->lastOutcome->hasErrors()
+            && $this->lastOutcome->containsMessage($this->expectedMessage);
     }
 
     protected function failureDescription($other): string
@@ -59,16 +61,14 @@ final class RuleFailsWithMessage extends Constraint
             return "\nFile does not exist: " . $other;
         }
 
-        $outcome = $this->runPhpStan($other);
-
-        if (!$outcome) {
+        if (!$this->lastOutcome) {
             return "\nPHPStan was not executed";
         }
 
         return "\nExpected exit code: non-zero"
-            . "\nActual exit code:   " . $outcome->exitCode()
+            . "\nActual exit code:   " . $this->lastOutcome->exitCode()
             . "\nExpected message:   " . var_export($this->expectedMessage, true)
-            . "\nPHPStan output:\n" . $outcome->outputAsString();
+            . "\nPHPStan output:\n" . $this->lastOutcome->outputAsString();
     }
 
     private function runPhpStan(mixed $other): ?PhpStanOutcome
