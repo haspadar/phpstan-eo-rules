@@ -1,5 +1,9 @@
 name-template: "v$RESOLVED_VERSION 🌱"
 tag-template: "v$RESOLVED_VERSION"
+version-template: "$MAJOR.$MINOR.$PATCH"
+
+include-pre-releases: true
+
 version-resolver:
   major:
     labels:
