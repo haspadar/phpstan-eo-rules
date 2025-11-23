@@ -11,10 +11,13 @@ use Haspadar\PHPStanEoRules\Tests\Integration\PhpStanOutcome;
 use Haspadar\PHPStanEoRules\Tests\Integration\PhpStanProcess;
 use PHPUnit\Framework\Constraint\Constraint;
 
+/**
+ * Asserts that a file fails PHPStan analysis with a specific error message.
+ *
+ * @param string $other Path to the file to analyze
+ */
 final class RuleFailsWithMessage extends Constraint
 {
-    private ?PhpStanOutcome $analysis = null;
-
     public function __construct(
         private readonly string $ruleClass,
         private readonly string $expectedMessage
@@ -32,15 +35,14 @@ final class RuleFailsWithMessage extends Constraint
 
     protected function matches($other): bool
     {
-        if (!is_string($other) || !file_exists($other)) {
+        $outcome = $this->runAnalysis($other);
+
+        if (!$outcome) {
             return false;
         }
 
-        $runner = new PhpStanProcess();
-        $this->analysis = $runner->run($other);
-
-        return $this->analysis->exitCode() !== 0
-            && $this->analysis->containsMessage($this->expectedMessage);
+        return $outcome->hasErrors()
+            && $outcome->containsMessage($this->expectedMessage);
     }
 
     protected function failureDescription($other): string
@@ -58,13 +60,24 @@ final class RuleFailsWithMessage extends Constraint
             return "\nFile does not exist: " . $other;
         }
 
-        if (!$this->analysis) {
+        $outcome = $this->runAnalysis($other);
+
+        if (!$outcome) {
             return "\nPHPStan was not executed";
         }
 
         return "\nExpected exit code: non-zero"
-            . "\nActual exit code:   " . $this->analysis->exitCode()
+            . "\nActual exit code:   " . $outcome->exitCode()
             . "\nExpected message:   " . var_export($this->expectedMessage, true)
-            . "\nPHPStan output:\n" . $this->analysis->outputAsString();
+            . "\nPHPStan output:\n" . $outcome->outputAsString();
+    }
+
+    private function runAnalysis(mixed $other): ?PhpStanOutcome
+    {
+        if (!is_string($other) || !file_exists($other)) {
+            return null;
+        }
+
+        return (new PhpStanProcess())->run($other);
     }
 }

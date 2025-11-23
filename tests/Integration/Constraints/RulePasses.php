@@ -11,10 +11,13 @@ use Haspadar\PHPStanEoRules\Tests\Integration\PhpStanOutcome;
 use Haspadar\PHPStanEoRules\Tests\Integration\PhpStanProcess;
 use PHPUnit\Framework\Constraint\Constraint;
 
+/**
+ * Asserts that a file passes PHPStan analysis with a given rule.
+ *
+ * @param string $other Path to the file to analyze
+ */
 final class RulePasses extends Constraint
 {
-    private ?PhpStanOutcome $outcome = null;
-
     public function __construct(
         private readonly string $ruleClass
     ) {
@@ -27,14 +30,13 @@ final class RulePasses extends Constraint
 
     protected function matches($other): bool
     {
-        if (!is_string($other) || !file_exists($other)) {
+        $outcome = $this->runAnalysis($other);
+
+        if (!$outcome) {
             return false;
         }
 
-        $process = new PhpStanProcess();
-        $this->outcome = $process->run($other);
-
-        return !$this->outcome->hasErrors();
+        return !$outcome->hasErrors();
     }
 
     protected function failureDescription($other): string
@@ -52,11 +54,22 @@ final class RulePasses extends Constraint
             return "\nFile does not exist: " . $other;
         }
 
-        if (!$this->outcome) {
+        $outcome = $this->runAnalysis($other);
+
+        if (!$outcome) {
             return "\nPHPStan was not executed";
         }
 
-        return "\nExit code: " . $this->outcome->exitCode()
-            . "\nPHPStan output:\n" . $this->outcome->outputAsString();
+        return "\nExit code: " . $outcome->exitCode()
+            . "\nPHPStan output:\n" . $outcome->outputAsString();
+    }
+
+    private function runAnalysis(mixed $other): ?PhpStanOutcome
+    {
+        if (!is_string($other) || !file_exists($other)) {
+            return null;
+        }
+
+        return (new PhpStanProcess())->run($other);
     }
 }

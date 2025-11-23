@@ -21,7 +21,13 @@ final class PhpStanProcess
         $phpstanConfig = realpath($this->phpstanConfig);
 
         if (!$phpstanBin || !$phpstanConfig) {
-            throw new \RuntimeException('PHPStan binary or config not found');
+            throw new \RuntimeException(
+                sprintf(
+                    'PHPStan binary or config not found. Binary: %s, Config: %s',
+                    $this->phpstanBin,
+                    $this->phpstanConfig
+                )
+            );
         }
 
         $output = [];
@@ -30,7 +36,7 @@ final class PhpStanProcess
         exec(
             sprintf(
                 '%s analyse --configuration %s --error-format raw --no-progress --no-ansi %s 2>&1',
-                escapeshellcmd($phpstanBin),
+                escapeshellarg($phpstanBin),
                 escapeshellarg($phpstanConfig),
                 escapeshellarg($file)
             ),

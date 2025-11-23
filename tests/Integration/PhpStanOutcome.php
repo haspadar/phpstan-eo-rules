@@ -32,11 +32,7 @@ final readonly class PhpStanOutcome
 
     public function hasErrors(): bool
     {
-        $filteredOutput = array_filter($this->output, fn($line) =>
-            trim($line) !== '' && $line !== '.'
-        );
-
-        return $this->exitCode !== 0 || !empty($filteredOutput);
+        return $this->exitCode !== 0;
     }
 
     public function containsMessage(string $message): bool

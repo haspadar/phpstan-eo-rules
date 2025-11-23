@@ -1,5 +1,4 @@
 <?php
-
 /*
  * SPDX-FileCopyrightText: Copyright (c) 2025 Konstantinas Mesnikas
  * SPDX-License-Identifier: MIT
@@ -16,11 +15,13 @@ use PHPUnit\Framework\TestCase;
 
 final class NoNullReturnRuleIntegrationTest extends TestCase
 {
+    private const FIXTURES_DIR = __DIR__ . '/../../Fixtures/Rules/NoNullReturnRule';
+
     #[Test]
     public function returnsSuccessWhenSuppressedNullGiven(): void
     {
         self::assertThat(
-            __DIR__ . '/../../Fixtures/Rules/NoNullReturnRule/SuppressedNull.php',
+            self::FIXTURES_DIR . '/SuppressedNull.php',
             new RulePasses(NoNullReturnRule::class)
         );
     }
@@ -29,7 +30,7 @@ final class NoNullReturnRuleIntegrationTest extends TestCase
     public function returnsErrorWhenUnsuppressedNullGiven(): void
     {
         self::assertThat(
-            __DIR__ . '/../../Fixtures/Rules/NoNullReturnRule/WithNullReturn.php',
+            self::FIXTURES_DIR . '/WithNullReturn.php',
             new RuleFailsWithMessage(
                 NoNullReturnRule::class,
                 'Returning null is forbidden by EO rules'
