@@ -8,7 +8,8 @@
     "phpstan/phpstan": "^2.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^10.5"
+    "phpunit/phpunit": "^10.5",
+    "friendsofphp/php-cs-fixer": "^3.90"
   },
   "minimum-stability": "stable",
   "prefer-stable": true,
@@ -24,7 +25,9 @@
   },
   "scripts": {
     "test": "phpunit --order-by=random",
-    "phpstan": "phpstan analyse"
+    "phpstan": "phpstan analyse",
+    "cs-fix": "php-cs-fixer fix --verbose",
+    "cs-check": "php-cs-fixer fix --dry-run --diff --verbose"
   },
   "config": {
     "platform-check": false

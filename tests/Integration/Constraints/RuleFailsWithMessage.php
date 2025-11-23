@@ -1,4 +1,5 @@
 <?php
+
 /*
  * SPDX-FileCopyrightText: Copyright (c) 2025 Konstantinas Mesnikas
  * SPDX-License-Identifier: MIT
@@ -11,6 +12,13 @@ use Haspadar\PHPStanEoRules\Tests\Integration\PhpStanOutcome;
 use Haspadar\PHPStanEoRules\Tests\Integration\PhpStanProcess;
 use PHPUnit\Framework\Constraint\Constraint;
 
+use function basename;
+use function file_exists;
+use function get_debug_type;
+use function is_string;
+use function sprintf;
+use function var_export;
+
 /**
  * Asserts that a file fails PHPStan analysis with a specific error message.
  * The constraint expects a file path string as input.
@@ -21,7 +29,7 @@ final class RuleFailsWithMessage extends Constraint
 
     public function __construct(
         private readonly string $ruleClass,
-        private readonly string $expectedMessage
+        private readonly string $expectedMessage,
     ) {
     }
 
@@ -30,7 +38,7 @@ final class RuleFailsWithMessage extends Constraint
         return sprintf(
             'fails PHPStan analysis with rule %s and contains message "%s"',
             $this->ruleClass,
-            $this->expectedMessage
+            $this->expectedMessage,
         );
     }
 
@@ -38,7 +46,7 @@ final class RuleFailsWithMessage extends Constraint
     {
         $this->lastOutcome = $this->runPhpStan($other);
 
-        if (!$this->lastOutcome) {
+        if (! $this->lastOutcome) {
             return false;
         }
 
@@ -48,20 +56,24 @@ final class RuleFailsWithMessage extends Constraint
 
     protected function failureDescription($other): string
     {
+        if (! is_string($other)) {
+            return 'value ' . get_debug_type($other) . ' ' . $this->toString();
+        }
+
         return 'file ' . basename($other) . ' ' . $this->toString();
     }
 
     protected function additionalFailureDescription($other): string
     {
-        if (!is_string($other)) {
+        if (! is_string($other)) {
             return "\nProvided value is not a string: " . get_debug_type($other);
         }
 
-        if (!file_exists($other)) {
+        if (! file_exists($other)) {
             return "\nFile does not exist: " . $other;
         }
 
-        if (!$this->lastOutcome) {
+        if (! $this->lastOutcome) {
             return "\nPHPStan was not executed";
         }
 
@@ -73,7 +85,7 @@ final class RuleFailsWithMessage extends Constraint
 
     private function runPhpStan(mixed $other): ?PhpStanOutcome
     {
-        if (!is_string($other) || !file_exists($other)) {
+        if (! is_string($other) || ! file_exists($other)) {
             return null;
         }
 

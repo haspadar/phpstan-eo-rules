@@ -14,6 +14,11 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
+use function str_contains;
+use function strtolower;
+
+use const DIRECTORY_SEPARATOR;
+
 /**
  * @implements Rule<Return_>
  */
@@ -33,14 +38,14 @@ final class NoNullReturnRule implements Rule
         if ($node->expr instanceof Node\Expr\ConstFetch &&
             strtolower($node->expr->name->toString()) === 'null'
         ) {
-            if (!$this->isUserCode($scope->getFile())) {
+            if (! $this->isUserCode($scope->getFile())) {
                 return [];
             }
 
             return [
                 RuleErrorBuilder::message('Returning null is forbidden by EO rules')
                     ->identifier('NoNullReturn')
-                    ->build()
+                    ->build(),
             ];
         }
 
@@ -49,6 +54,6 @@ final class NoNullReturnRule implements Rule
 
     private function isUserCode(string $file): bool
     {
-        return !str_contains($file, DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
+        return ! str_contains($file, DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
     }
 }

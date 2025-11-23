@@ -1,4 +1,5 @@
 <?php
+
 /*
  * SPDX-FileCopyrightText: Copyright (c) 2025 Konstantinas Mesnikas
  * SPDX-License-Identifier: MIT
@@ -7,11 +8,14 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanEoRules\Tests\Integration;
 
+use function implode;
+use function str_contains;
+
 final readonly class PhpStanOutcome
 {
     public function __construct(
         private int $exitCode,
-        private array $output
+        private array $output,
     ) {
     }
 
