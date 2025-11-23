@@ -1,6 +1,24 @@
-name-template: "v$NEXT_PATCH_VERSION 🌱"
-tag-template: "v$NEXT_PATCH_VERSION"
-version-template: "$MAJOR.$MINOR.$PATCH"
+name-template: "v$RESOLVED_VERSION 🌱"
+tag-template: "v$RESOLVED_VERSION"
+version-resolver:
+  major:
+    labels:
+      - "breaking"
+  minor:
+    labels:
+      - "feature"
+      - "feat"
+  patch:
+    labels:
+      - "bug"
+      - "fix"
+      - "refactor"
+      - "chore"
+      - "ci"
+      - "docs"
+      - "performance"
+      - "security"
+  default: patch
 
 categories:
   - title: "🚨 Breaking Changes"
