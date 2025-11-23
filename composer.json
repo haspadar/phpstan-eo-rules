@@ -23,7 +23,8 @@
     }
   },
   "scripts": {
-    "test": "phpunit --order-by=random"
+    "test": "phpunit --order-by=random",
+    "phpstan": "phpstan analyse"
   },
   "config": {
     "platform-check": false

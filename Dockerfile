@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y \
 git unzip zip curl bash fish \
 libzip-dev libicu-dev zlib1g-dev libonig-dev \
 && docker-php-ext-install \
-intl zip opcache mbstring \
+intl zip mbstring \
 && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
