@@ -12,9 +12,8 @@ use Haspadar\PHPStanEoRules\Tests\Integration\PhpStanProcess;
 use PHPUnit\Framework\Constraint\Constraint;
 
 /**
- * Asserts that a file fails PHPStan analysis with a specific error message.
- *
- * @param string $other Path to the file to analyze
+ * Asserts that a file fails PHPStan analysis with a specific error message
+ * The constraint expects a file path string as input
  */
 final class RuleFailsWithMessage extends Constraint
 {
@@ -35,7 +34,7 @@ final class RuleFailsWithMessage extends Constraint
 
     protected function matches($other): bool
     {
-        $outcome = $this->runAnalysis($other);
+        $outcome = $this->runPhpStan($other);
 
         if (!$outcome) {
             return false;
@@ -60,7 +59,7 @@ final class RuleFailsWithMessage extends Constraint
             return "\nFile does not exist: " . $other;
         }
 
-        $outcome = $this->runAnalysis($other);
+        $outcome = $this->runPhpStan($other);
 
         if (!$outcome) {
             return "\nPHPStan was not executed";
@@ -72,7 +71,7 @@ final class RuleFailsWithMessage extends Constraint
             . "\nPHPStan output:\n" . $outcome->outputAsString();
     }
 
-    private function runAnalysis(mixed $other): ?PhpStanOutcome
+    private function runPhpStan(mixed $other): ?PhpStanOutcome
     {
         if (!is_string($other) || !file_exists($other)) {
             return null;
