@@ -56,6 +56,10 @@ final class RuleFailsWithMessage extends Constraint
 
     protected function failureDescription($other): string
     {
+        if (! is_string($other)) {
+            return 'value ' . get_debug_type($other) . ' ' . $this->toString();
+        }
+
         return 'file ' . basename($other) . ' ' . $this->toString();
     }
 

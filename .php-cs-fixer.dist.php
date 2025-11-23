@@ -15,7 +15,7 @@ $finder = PhpCsFixer\Finder::create()
         __DIR__ . '/tests',
     ])
     ->exclude('vendor')
-    ->notPath('tests/Fixtures')
+    ->notPath('Fixtures')
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
