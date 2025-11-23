@@ -75,13 +75,41 @@ A git tag will be created automatically.
 
 ## 🧪 Development
 
-### Running Tests
+### Local Setup
+
+#### Option 1: Docker (Recommended)
+
+Use Docker to work on the project without installing PHP locally:
+
 ```bash
-composer test
+# Build the container
+docker compose build
+
+# Install dependencies
+docker compose run --rm php composer install
+
+# Run tests
+docker compose run --rm php vendor/bin/phpunit
+
+# Run PHPStan
+docker compose run --rm php vendor/bin/phpstan analyse
+
+# Open interactive shell
+docker compose run --rm php bash
 ```
 
-### Running PHPStan
+#### Option 2: Local PHP
+
+If you have PHP 8.2+ installed locally:
+
 ```bash
+# Install dependencies
+composer install
+
+# Run tests
+composer test
+
+# Run PHPStan
 composer phpstan
 ```
 
