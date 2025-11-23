@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanEoRules\Tests\Fixtures\NoNullReturnRule;
+namespace Haspadar\PHPStanEoRules\Tests\Fixtures\Rules\NoNullReturnRule;
 
 final readonly class WithNullReturn
 {

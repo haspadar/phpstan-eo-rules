@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanEoRules\Tests\Integration;
+namespace Haspadar\PHPStanEoRules\Tests\Integration\Rules;
 
 use Haspadar\PHPStanEoRules\Rules\NoNullReturnRule;
 use Haspadar\PHPStanEoRules\Tests\Integration\Constraints\RuleFailsWithMessage;
