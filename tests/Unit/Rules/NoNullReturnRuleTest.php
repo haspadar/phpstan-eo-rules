@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanEoRules\Tests\Rules;
+namespace Haspadar\PHPStanEoRules\Tests\Unit\Rules;
 
 use Haspadar\PHPStanEoRules\Rules\NoNullReturnRule;
 use PHPUnit\Framework\Attributes\Test;
