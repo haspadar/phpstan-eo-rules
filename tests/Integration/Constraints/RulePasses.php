@@ -13,11 +13,12 @@ use PHPUnit\Framework\Constraint\Constraint;
 
 /**
  * Asserts that a file passes PHPStan analysis with a given rule.
- *
- * @param string $other Path to the file to analyze
+ * The constraint expects a file path string as input.
  */
 final class RulePasses extends Constraint
 {
+    private ?PhpStanOutcome $lastOutcome = null;
+
     public function __construct(
         private readonly string $ruleClass
     ) {
@@ -30,13 +31,13 @@ final class RulePasses extends Constraint
 
     protected function matches($other): bool
     {
-        $outcome = $this->runAnalysis($other);
+        $this->lastOutcome = $this->runPhpStan($other);
 
-        if (!$outcome) {
+        if (!$this->lastOutcome) {
             return false;
         }
 
-        return !$outcome->hasErrors();
+        return !$this->lastOutcome->hasErrors();
     }
 
     protected function failureDescription($other): string
@@ -54,17 +55,15 @@ final class RulePasses extends Constraint
             return "\nFile does not exist: " . $other;
         }
 
-        $outcome = $this->runAnalysis($other);
-
-        if (!$outcome) {
+        if (!$this->lastOutcome) {
             return "\nPHPStan was not executed";
         }
 
-        return "\nExit code: " . $outcome->exitCode()
-            . "\nPHPStan output:\n" . $outcome->outputAsString();
+        return "\nExit code: " . $this->lastOutcome->exitCode()
+            . "\nPHPStan output:\n" . $this->lastOutcome->outputAsString();
     }
 
-    private function runAnalysis(mixed $other): ?PhpStanOutcome
+    private function runPhpStan(mixed $other): ?PhpStanOutcome
     {
         if (!is_string($other) || !file_exists($other)) {
             return null;
