@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace Haspadar\PHPStanEoRules\Tests\Unit\Rules;
 
 use Haspadar\PHPStanEoRules\Rules\NoNullReturnRule;
-use PHPUnit\Framework\Attributes\Test;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class NoNullReturnRuleTest extends RuleTestCase
 {
@@ -25,7 +25,7 @@ final class NoNullReturnRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../Fixtures/Rules/NoNullReturnRule/WithNullReturn.php'],
-            [['Returning null is forbidden by EO rules', 15]]
+            [['Returning null is forbidden by EO rules', 15]],
         );
     }
 
@@ -34,7 +34,7 @@ final class NoNullReturnRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../Fixtures/Rules/NoNullReturnRule/WithoutNull.php'],
-            []
+            [],
         );
     }
 
@@ -43,7 +43,7 @@ final class NoNullReturnRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../Fixtures/Rules/NoNullReturnRule/BareReturn.php'],
-            []
+            [],
         );
     }
 }

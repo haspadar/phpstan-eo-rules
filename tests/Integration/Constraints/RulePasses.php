@@ -1,4 +1,5 @@
 <?php
+
 /*
  * SPDX-FileCopyrightText: Copyright (c) 2025 Konstantinas Mesnikas
  * SPDX-License-Identifier: MIT
@@ -11,6 +12,12 @@ use Haspadar\PHPStanEoRules\Tests\Integration\PhpStanOutcome;
 use Haspadar\PHPStanEoRules\Tests\Integration\PhpStanProcess;
 use PHPUnit\Framework\Constraint\Constraint;
 
+use function basename;
+use function file_exists;
+use function get_debug_type;
+use function is_string;
+use function sprintf;
+
 /**
  * Asserts that a file passes PHPStan analysis with a given rule.
  * The constraint expects a file path string as input.
@@ -20,7 +27,7 @@ final class RulePasses extends Constraint
     private ?PhpStanOutcome $lastOutcome = null;
 
     public function __construct(
-        private readonly string $ruleClass
+        private readonly string $ruleClass,
     ) {
     }
 
@@ -33,11 +40,11 @@ final class RulePasses extends Constraint
     {
         $this->lastOutcome = $this->runPhpStan($other);
 
-        if (!$this->lastOutcome) {
+        if (! $this->lastOutcome) {
             return false;
         }
 
-        return !$this->lastOutcome->hasErrors();
+        return ! $this->lastOutcome->hasErrors();
     }
 
     protected function failureDescription($other): string
@@ -47,15 +54,15 @@ final class RulePasses extends Constraint
 
     protected function additionalFailureDescription($other): string
     {
-        if (!is_string($other)) {
+        if (! is_string($other)) {
             return "\nProvided value is not a string: " . get_debug_type($other);
         }
 
-        if (!file_exists($other)) {
+        if (! file_exists($other)) {
             return "\nFile does not exist: " . $other;
         }
 
-        if (!$this->lastOutcome) {
+        if (! $this->lastOutcome) {
             return "\nPHPStan was not executed";
         }
 
@@ -65,7 +72,7 @@ final class RulePasses extends Constraint
 
     private function runPhpStan(mixed $other): ?PhpStanOutcome
     {
-        if (!is_string($other) || !file_exists($other)) {
+        if (! is_string($other) || ! file_exists($other)) {
             return null;
         }
 
