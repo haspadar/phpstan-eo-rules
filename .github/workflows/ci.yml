@@ -32,11 +32,15 @@ jobs:
       - name: Run PHPUnit tests with coverage
         run: composer test -- --coverage-clover=coverage.xml
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+      - name: Upload coverage to Codecov (with retry)
+        uses: Wandalen/wretry.action@v3.5.0
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
+          attempt_limit: 3
+          attempt_delay: 10000
+          action: codecov/codecov-action@v5
+          with: |
+            token: ${{ secrets.CODECOV_TOKEN }}
+            files: ./coverage.xml
 
       - name: Run PHPStan analysis
         run: composer phpstan
