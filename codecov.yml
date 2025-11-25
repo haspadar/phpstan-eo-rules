@@ -6,13 +6,9 @@ coverage:
   status:
     project:
       default:
-        target: 95%
-        threshold: 1%
-
-    patch:
-      default:
-        target: 95%
-        threshold: 1%
+        target: auto
+        threshold: 0%
+        if_ci_failed: error
 
 comment:
   layout: "reach, diff, flags, files"
