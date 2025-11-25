@@ -26,7 +26,7 @@ final class NoNullReturnRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../Fixtures/Rules/NoNullReturnRule/WithNullReturn.php'],
-            [['Returning null is forbidden by EO rules', 15]],
+            [['Returning null is forbidden by EO rules', 16]],
         );
     }
 
