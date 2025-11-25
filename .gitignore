@@ -10,3 +10,4 @@
 /.idea/
 /*.log
 /.php-cs-fixer.cache
+/.claude/
