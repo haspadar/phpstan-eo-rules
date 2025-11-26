@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: 2025 Konstantinas Mesnikas
+#
+# SPDX-License-Identifier: MIT
+
+name: Hadolint
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile'
+      - '.hadolint.yaml'
+      - '.github/workflows/hadolint.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile'
+      - '.hadolint.yaml'
+      - '.github/workflows/hadolint.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  hadolint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Run Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          config: .hadolint.yaml
+          failure-threshold: warning
