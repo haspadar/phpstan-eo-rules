@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: MIT
 
-// dangerfile.mjs
 const pr = danger.github.pr;
 const git = danger.git;
 
@@ -23,15 +22,16 @@ if (totalChanges > 200) {
     warn(`Large PR (${totalChanges} lines). Consider splitting into smaller PRs.`);
 }
 
-// Tests
-const sourceFiles = [...git.modified_files, ...git.created_files].filter(f => f.endsWith('.php') && !f.includes('tests/'));
-const testFiles = [...git.modified_files, ...git.created_files].filter(f => f.endsWith('.php') && f.includes('tests/'));
+// Tests - checks both 'tests/' and 'test/' directories
+const changedFiles = [...git.modified_files, ...git.created_files];
+const sourceFiles = changedFiles.filter(f => f.endsWith('.php') && !f.includes('tests/') && !f.includes('test/'));
+const testFiles = changedFiles.filter(f => f.endsWith('.php') && (f.includes('tests/') || f.includes('test/')));
 if (sourceFiles.length > 0 && testFiles.length === 0) {
     warn('Source code modified without test changes');
 }
 
 // Debug statements
-const phpFiles = [...git.modified_files, ...git.created_files].filter(f => f.endsWith('.php'));
+const phpFiles = changedFiles.filter(f => f.endsWith('.php'));
 const debugPatterns = [/var_dump\s*\(/, /print_r\s*\(/, /\bdd\s*\(/, /dump\s*\(/];
 for (const file of phpFiles) {
     const content = await danger.github.utils.fileContents(file);
@@ -43,7 +43,7 @@ for (const file of phpFiles) {
     }
 }
 
-// Composer sync
-if (git.modified_files.includes('composer.json') && !git.modified_files.includes('composer.lock')) {
+// Composer sync - checks both modified and created files
+if (changedFiles.includes('composer.json') && !changedFiles.includes('composer.lock')) {
     fail('composer.json modified but composer.lock not updated');
 }
