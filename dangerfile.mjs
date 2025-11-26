@@ -45,14 +45,19 @@ schedule(async () => {
 });
 
 // Composer sync - checks both modified and created files
-// Ignores changes that only affect scripts section
+// Ignores changes that don't touch require/require-dev/autoload/autoload-dev sections
 schedule(async () => {
     if (changedFiles.includes('composer.json') && !changedFiles.includes('composer.lock')) {
         const composerDiff = await danger.git.diffForFile('composer.json');
 
-        // Check if changes are only in scripts section
+        // Only check actual changes (+ or - lines), not context
         const diffLines = composerDiff?.diff?.split('\n') || [];
-        const hasRequireChanges = diffLines.some(line =>
+        const changedLines = diffLines.filter(line =>
+            (line.startsWith('+') || line.startsWith('-')) &&
+            !line.startsWith('+++') &&
+            !line.startsWith('---')
+        );
+        const hasRequireChanges = changedLines.some(line =>
             line.includes('"require"') ||
             line.includes('"require-dev"') ||
             line.includes('"autoload"') ||
