@@ -1,7 +1,7 @@
 <?php
 
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2025 Konstantinas Mesnikas
+ * SPDX-FileCopyrightText: 2025 Konstantinas Mesnikas
  * SPDX-License-Identifier: MIT
  */
 declare(strict_types=1);
@@ -9,13 +9,19 @@ declare(strict_types=1);
 /**
  * PHP CS Fixer configuration for phpstan-eo-rules
  */
+
+$currentYear = (int) date('Y');
+$startYear = 2025;
+$header = $currentYear === $startYear
+    ? "SPDX-FileCopyrightText: $startYear Konstantinas Mesnikas\nSPDX-License-Identifier: MIT"
+    : "SPDX-FileCopyrightText: $startYear-$currentYear Konstantinas Mesnikas\nSPDX-License-Identifier: MIT";
+
 $finder = PhpCsFixer\Finder::create()
     ->in([
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ])
     ->exclude('vendor')
-    ->notPath('Fixtures')
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
@@ -23,8 +29,16 @@ $finder = PhpCsFixer\Finder::create()
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
+        // Header comment
+        'header_comment' => [
+            'header' => $header,
+            'comment_type' => 'comment',
+            'location' => 'after_declare_strict',
+            'separate' => 'both',
+        ],
+
         // PSR Standards
-        '@PSR12' => true,
+        '@PER-CS2x0' => true,
         '@PHP8x2Migration' => true,
 
         // Array formatting
@@ -50,19 +64,14 @@ return (new PhpCsFixer\Config())
         'declare_strict_types' => true,
 
         // Visibility and finality
-        'modifier_keywords' => [
-            'elements' => ['property', 'method', 'const'],
-        ],
         'final_class' => true,
         'final_internal_class' => true,
 
-        // Type hints - строгая типизация
+        // Type hints
         'fully_qualified_strict_types' => true,
         'native_type_declaration_casing' => true,
 
         // Spacing and formatting
-        'blank_line_after_namespace' => true,
-        'blank_line_after_opening_tag' => true,
         'blank_line_before_statement' => [
             'statements' => ['return', 'throw', 'try'],
         ],
@@ -104,7 +113,7 @@ return (new PhpCsFixer\Config())
         'single_blank_line_at_eof' => true,
 
         // Risky rules
-        'strict_comparison' => true, // === instead of ==
+        'strict_comparison' => true,
         'strict_param' => true,
         'native_constant_invocation' => true,
         'native_function_invocation' => [

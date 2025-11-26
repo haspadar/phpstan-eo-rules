@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2025 Konstantinas Mesnikas
+#
+# SPDX-License-Identifier: MIT
+
 name: CI
 
 on:
@@ -12,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -25,6 +29,9 @@ jobs:
 
       - name: Validate composer.json
         run: composer validate --strict
+
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v6
 
       - name: Code style check
         run: composer cs-check

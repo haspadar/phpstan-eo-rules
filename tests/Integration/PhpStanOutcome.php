@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2025 Konstantinas Mesnikas
+ * SPDX-FileCopyrightText: 2025 Konstantinas Mesnikas
  * SPDX-License-Identifier: MIT
  */
-declare(strict_types=1);
 
 namespace Haspadar\PHPStanEoRules\Tests\Integration;
 
@@ -16,8 +17,7 @@ final readonly class PhpStanOutcome
     public function __construct(
         private int $exitCode,
         private array $output,
-    ) {
-    }
+    ) {}
 
     public function exitCode(): int
     {

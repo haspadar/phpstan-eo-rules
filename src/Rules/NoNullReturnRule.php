@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2025 Konstantinas Mesnikas
+ * SPDX-FileCopyrightText: 2025 Konstantinas Mesnikas
  * SPDX-License-Identifier: MIT
  */
-declare(strict_types=1);
 
 namespace Haspadar\PHPStanEoRules\Rules;
 

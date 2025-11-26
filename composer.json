@@ -27,7 +27,8 @@
     "test": "phpunit --order-by=random",
     "phpstan": "phpstan analyse",
     "cs-fix": "php-cs-fixer fix --verbose",
-    "cs-check": "php-cs-fixer fix --dry-run --diff --verbose"
+    "cs-check": "php-cs-fixer fix --dry-run --diff --verbose",
+    "reuse-lint": "reuse lint"
   },
   "config": {
     "platform-check": false
