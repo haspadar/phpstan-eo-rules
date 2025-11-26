@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: 2025 Konstantinas Mesnikas
+#
+# SPDX-License-Identifier: MIT
+
+[default.extend-identifiers]
+# PHPStan and PHP terms
+phpstan = "phpstan"
+ctor = "ctor"
+
+[default.extend-words]
+# Technical terms and proper names
+elegantobjects = "elegantobjects"
