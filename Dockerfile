@@ -8,6 +8,7 @@ FROM php:8.2-cli
 RUN apt-get update && apt-get install -y \
     git unzip zip curl bash fish \
     python3 python3-pip \
+    nodejs npm \
     libzip-dev libicu-dev zlib1g-dev libonig-dev \
     && docker-php-ext-install \
     intl zip mbstring \

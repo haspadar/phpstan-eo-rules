@@ -15,3 +15,5 @@
 /*.log
 /.php-cs-fixer.cache
 /.claude/
+
+/node_modules/
