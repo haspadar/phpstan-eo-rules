@@ -24,24 +24,25 @@ if (totalChanges > 200) {
 
 // Tests - checks both 'tests/' and 'test/' directories
 const changedFiles = [...git.modified_files, ...git.created_files];
-const sourceFiles = changedFiles.filter(f => f.endsWith('.php') && !f.includes('tests/') && !f.includes('test/'));
-const testFiles = changedFiles.filter(f => f.endsWith('.php') && (f.includes('tests/') || f.includes('test/')));
+const isTestPath = (f) => /(^|\/)tests?\//.test(f);
+const sourceFiles = changedFiles.filter(f => f.endsWith('.php') && !isTestPath(f));
+const testFiles = changedFiles.filter(f => f.endsWith('.php') && isTestPath(f));
 if (sourceFiles.length > 0 && testFiles.length === 0) {
     warn('Source code modified without test changes');
 }
 
 // Debug statements
-const phpFiles = changedFiles.filter(f => f.endsWith('.php'));
-const debugPatterns = [/var_dump\s*\(/, /print_r\s*\(/, /\bdd\s*\(/, /dump\s*\(/];
-for (const file of phpFiles) {
-    const content = await danger.github.utils.fileContents(file);
-    for (const pattern of debugPatterns) {
-        if (pattern.test(content)) {
+schedule(async () => {
+    const phpFiles = changedFiles.filter(f => f.endsWith('.php'));
+    const debugPatterns = [/var_dump\s*\(/, /print_r\s*\(/, /\bdd\s*\(/, /dump\s*\(/];
+
+    for (const file of phpFiles) {
+        const content = await danger.github.utils.fileContents(file);
+        if (debugPatterns.some(p => p.test(content))) {
             fail(`Debug statement found in ${file}`);
-            break;
         }
     }
-}
+});
 
 // Composer sync - checks both modified and created files
 if (changedFiles.includes('composer.json') && !changedFiles.includes('composer.lock')) {
