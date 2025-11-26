@@ -45,6 +45,23 @@ schedule(async () => {
 });
 
 // Composer sync - checks both modified and created files
-if (changedFiles.includes('composer.json') && !changedFiles.includes('composer.lock')) {
-    fail('composer.json modified but composer.lock not updated');
-}
+// Ignores changes that only affect scripts section
+schedule(async () => {
+    if (changedFiles.includes('composer.json') && !changedFiles.includes('composer.lock')) {
+        const composerDiff = await danger.git.diffForFile('composer.json');
+
+        // Check if changes are only in scripts section
+        const diffLines = composerDiff?.diff?.split('\n') || [];
+        const hasRequireChanges = diffLines.some(line =>
+            line.includes('"require"') ||
+            line.includes('"require-dev"') ||
+            line.includes('"autoload"') ||
+            line.includes('"autoload-dev"')
+        );
+
+        // Only fail if require/autoload sections changed
+        if (hasRequireChanges) {
+            fail('composer.json modified but composer.lock not updated');
+        }
+    }
+});
