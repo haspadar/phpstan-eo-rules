@@ -32,9 +32,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install Composer
 COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
 
-# Install Hadolint for Dockerfile linting
+# Install Hadolint for Dockerfile linting with checksum verification
 RUN curl -sL -o /usr/local/bin/hadolint \
     "https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64" \
+    && curl -sL -o /tmp/hadolint.sha256 \
+    "https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64.sha256" \
+    && cd /usr/local/bin && sha256sum -c /tmp/hadolint.sha256 \
+    && rm /tmp/hadolint.sha256 \
     && chmod +x /usr/local/bin/hadolint
 
 # Set timezone
