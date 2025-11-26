@@ -29,7 +29,8 @@
     "cs-fix": "php-cs-fixer fix --verbose",
     "cs-check": "php-cs-fixer fix --dry-run --diff --verbose",
     "reuse-lint": "reuse lint",
-    "reuse-annotate": "reuse annotate --copyright='Konstantinas Mesnikas' --license='MIT'"
+    "reuse-annotate": "reuse annotate --copyright='Konstantinas Mesnikas' --license='MIT'",
+    "danger-pr": "npx danger pr"
   },
   "config": {
     "platform-check": false

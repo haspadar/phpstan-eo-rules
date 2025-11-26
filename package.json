@@ -1,0 +1,7 @@
+{
+  "name": "phpstan-eo-rules",
+  "private": true,
+  "devDependencies": {
+    "danger": "^13"
+  }
+}
