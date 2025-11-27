@@ -16,3 +16,4 @@
 /.claude/
 
 /node_modules/
+/.prompts/
