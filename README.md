@@ -16,6 +16,7 @@ immutability, composition, no static state, and explicit contracts.
 Prohibits returning `null` from methods. Instead of returning null, methods should either return a meaningful value or throw an exception. This eliminates null checks and makes code more predictable.
 
 **❌ Bad:**
+
 ```php
 public function find(int $id): ?User
 {
@@ -24,6 +25,7 @@ public function find(int $id): ?User
 ```
 
 **✅ Good:**
+
 ```php
 public function find(int $id): User
 {
@@ -38,6 +40,7 @@ public function find(int $id): User
 ```
 
 To suppress this rule for specific cases:
+
 ```php
 /** @phpstan-ignore NoNullReturn */
 return null;
@@ -46,11 +49,13 @@ return null;
 ---
 
 ## ⚙️ Installation
+
 ```bash
 composer require --dev haspadar/phpstan-eo-rules
 ```
 
 Enable in your `phpstan.neon`:
+
 ```neon
 includes:
     - vendor/haspadar/phpstan-eo-rules/extension.neon
