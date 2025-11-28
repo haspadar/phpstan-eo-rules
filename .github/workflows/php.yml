@@ -2,7 +2,11 @@
 #
 # SPDX-License-Identifier: MIT
 
-name: CI
+name: PHP
+
+permissions:
+  contents: read
+  id-token: write
 
 on:
   push:
@@ -30,19 +34,16 @@ jobs:
       - name: Validate composer.json
         run: composer validate --strict
 
-      - name: REUSE Compliance Check
-        uses: fsfe/reuse-action@v6
-
       - name: Code style check
         run: composer cs-check
 
       - name: Run PHPUnit tests with coverage
-        run: composer test -- --coverage-clover=coverage.xml
+        run: vendor/bin/phpunit --order-by=random --coverage-clover=coverage.xml
 
-      - name: Upload coverage to Codecov
+      - name: Upload coverage to Codecov via OIDC
         uses: codecov/codecov-action@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          use_oidc: true
           files: ./coverage.xml
 
       - name: Run PHPStan analysis
