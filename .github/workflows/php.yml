@@ -36,5 +36,11 @@ jobs:
       - name: Run PHPUnit tests with coverage
         run: composer test -- --coverage-clover=coverage.xml
 
+      - name: Upload coverage to Codecov via OIDC
+        uses: codecov/codecov-action@v5
+        with:
+          use_oidc: true
+          files: ./coverage.xml
+
       - name: Run PHPStan analysis
         run: composer phpstan
