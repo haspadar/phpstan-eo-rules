@@ -1,6 +1,6 @@
 # Contributing to phpstan-eo-rules
 
-First off, thank you for considering contributing to phpstan-eo-rules! It's people like you that make the open source community such a great place.
+First off, thank you for considering contributing to phpstan-eo-rules! It's people like you that make the open-source community such a great place.
 
 ## Code of Conduct
 
@@ -45,7 +45,7 @@ To get started with the project, you'll need to have [PHP](https://www.php.net/)
     npm install
     ```
 
-## Running aLinter and Checks
+## Running Code Quality Checks
 
 This project uses several tools to ensure code quality and consistency.
 
