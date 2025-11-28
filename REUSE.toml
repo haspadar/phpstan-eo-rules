@@ -10,6 +10,7 @@ path = [
     "composer.json",
     "composer.lock",
     "README.md",
+    "CONTRIBUTING.md",
     ".gitignore"
 ]
 
